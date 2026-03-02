@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>McGinnis AI Automation — Automation for Trades Businesses</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg2: #111118; --card: #16161f; --border: #2a2a3a;
+      --accent: #6c63ff; --accent2: #00d4aa; --text: #e8e8f0; --muted: #888899;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 5%;
+      background: rgba(10,10,15,0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-size: 1.4rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta { background: var(--accent); color: #fff; padding: 0.55rem 1.4rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      padding: 8rem 5% 4rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(108,99,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent); padding: 0.4rem 1rem; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: #fff; max-width: 800px; margin-bottom: 1.5rem; }
+    .hero h1 .highlight { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 560px; margin-bottom: 2.5rem; }
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-primary { background: var(--accent); color: #fff; padding: 0.85rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 0 30px rgba(108,99,255,0.3); transition: transform 0.2s; }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-secondary { background: transparent; color: var(--text); padding: 0.85rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 1rem; border: 1px solid var(--border); transition: border-color 0.2s; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; flex-wrap: wrap; justify-content: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: #fff; }
+    .stat-num em { color: var(--accent); font-style: normal; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    section { padding: 6rem 5%; }
+    .section-label { text-align: center; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .section-title { text-align: center; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .section-sub { text-align: center; color: var(--muted); font-size: 1rem; max-width: 540px; margin: 0 auto 3.5rem; }
+
+    .problem { background: var(--bg2); }
+    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: border-color 0.3s; }
+    .problem-card:hover { border-color: rgba(108,99,255,0.4); }
+    .problem-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .problem-card h3 { color: #fff; font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .problem-card p { color: var(--muted); font-size: 0.88rem; }
+
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+    .service-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; transition: transform 0.3s, border-color 0.3s; }
+    .service-card:hover { transform: translateY(-4px); border-color: rgba(108,99,255,0.4); }
+    .service-card.featured { border-color: var(--accent); background: linear-gradient(135deg, rgba(108,99,255,0.1), var(--card)); }
+    .service-badge { display: inline-block; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.25rem 0.75rem; border-radius: 100px; margin-bottom: 1.2rem; }
+    .service-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 0.4rem; }
+    .price { font-size: 2.2rem; font-weight: 800; color: #fff; margin: 1rem 0; }
+    .price span { font-size: 1rem; color: var(--muted); font-weight: 400; }
+    .service-features { list-style: none; margin: 1.5rem 0; }
+    .service-features li { color: var(--muted); font-size: 0.9rem; padding: 0.4rem 0; display: flex; align-items: center; gap: 0.6rem; }
+    .service-features li::before { content: '✓'; color: var(--accent2); font-weight: 700; }
+    .btn-card { display: block; text-align: center; width: 100%; padding: 0.8rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: opacity 0.2s; }
+    .btn-card-solid { background: var(--accent); color: #fff; }
+    .btn-card-outline { border: 1px solid var(--border); color: var(--text); }
+    .btn-card:hover { opacity: 0.8; }
+
+    .how { background: var(--bg2); }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+    .step { text-align: center; padding: 1.5rem; }
+    .step-num { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; color: #fff; margin: 0 auto 1.2rem; }
+    .step h3 { color: #fff; margin-bottom: 0.5rem; }
+    .step p { color: var(--muted); font-size: 0.88rem; }
+
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+    .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+    .stars { color: #f59e0b; margin-bottom: 1rem; }
+    .testimonial p { color: var(--text); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+    .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.9rem; }
+    .author-name { color: #fff; font-weight: 600; font-size: 0.9rem; }
+    .author-role { color: var(--muted); font-size: 0.8rem; }
+
+    .cta-section { text-align: center; background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,170,0.08)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .cta-section h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: #fff; margin-bottom: 1rem; }
+    .cta-section p { color: var(--muted); max-width: 500px; margin: 0 auto 2.5rem; }
+
+    footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 3rem 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    .footer-links a:hover { color: #fff; }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">McGinnis <span>AI Automation</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#testimonials">Results</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🤖 AI Automation for Trades</div>
+  <h1>Stop Losing Jobs to <span class="highlight">Missed Calls</span></h1>
+  <p>We build AI-powered automation systems that follow up with every lead instantly — so you close more jobs without lifting a finger.</p>
+  <div class="hero-buttons">
+    <a href="#contact" class="btn-primary">Book a Free Demo</a>
+    <a href="#services" class="btn-secondary">See Pricing →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">78<em>%</em></div>
+      <div class="stat-label">Callers don't leave voicemails</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5<em>min</em></div>
+      <div class="stat-label">Average response time</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3<em>x</em></div>
+      <div class="stat-label">More leads converted</div>
+    </div>
+  </div>
+</section>
+
+<section class="problem" id="problem">
+  <p class="section-label">The Problem</p>
+  <h2 class="section-title">Every Missed Call Is a Lost Job</h2>
+  <p class="section-sub">Trades businesses lose thousands in revenue every week from unanswered calls. Here's what's happening right now.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">📵</div>
+      <h3>You Can't Always Answer</h3>
+      <p>You're on a job, under a sink, or on a roof. Calls go to voicemail — and most people hang up and call your competitor.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">⏰</div>
+      <h3>Slow Follow-Up Kills Deals</h3>
+      <p>A lead who doesn't hear back within 5 minutes is 21x less likely to convert. Delayed responses cost you real money.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📋</div>
+      <h3>Manual Admin Eats Your Day</h3>
+      <p>Scheduling, confirmations, follow-ups — hours wasted on tasks that could run automatically while you focus on the work.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>Paying for Leads You're Losing</h3>
+      <p>You're spending on ads and referrals but losing leads before they ever book. That's money down the drain.</p>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <p class="section-label">Pricing Plans</p>
+  <h2 class="section-title">Simple, Flat-Rate Plans</h2>
+  <p class="section-sub">No contracts, no setup fees. Just automation that pays for itself every single month.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <h3>Starter</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:0.3rem">Perfect for solo operators</p>
+      <div class="price">$297<span>/mo</span></div>
+      <ul class="service-features">
+        <li>Missed call text-back (instant)</li>
+        <li>AI SMS follow-up sequence</li>
+        <li>Lead capture form</li>
+        <li>Monthly performance report</li>
+        <li>Email support</li>
+      </ul>
+      <a href="#contact" class="btn-card btn-card-outline">Get Started</a>
+    </div>
+    <div class="service-card featured">
+      <div class="service-badge">Most Popular</div>
+      <h3>Growth</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:0.3rem">For growing trades businesses</p>
+      <div class="price">$497<span>/mo</span></div>
+      <ul class="service-features">
+        <li>Everything in Starter</li>
+        <li>AI voice assistant (24/7)</li>
+        <li>Appointment booking automation</li>
+        <li>Review request sequences</li>
+        <li>CRM integration</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="#contact" class="btn-card btn-card-solid">Get Started</a>
+    </div>
+    <div class="service-card">
+      <h3>Pro</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:0.3rem">Full automation suite</p>
+      <div class="price">$697<span>/mo</span></div>
+      <ul class="service-features">
+        <li>Everything in Growth</li>
+        <li>Custom AI chatbot (website)</li>
+        <li>Estimate follow-up automation</li>
+        <li>Seasonal re-engagement campaigns</li>
+        <li>Custom integrations</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <a href="#contact" class="btn-card btn-card-outline">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <p class="section-label">The Process</p>
+  <h2 class="section-title">Up and Running in Days, Not Months</h2>
+  <p class="section-sub">We handle everything. You just keep doing the work you're great at.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Free Strategy Call</h3>
+      <p>We learn how your business works and identify the highest-impact automations for your situation.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>We Build It</h3>
+      <p>Our team sets up your entire automation system — missed call flows, AI voice, booking, and more.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Go Live in 48hrs</h3>
+      <p>Your system goes live fast. We test everything end-to-end before you take a single call.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>We Optimize Monthly</h3>
+      <p>We review your numbers each month and continuously improve your system to maximize conversions.</p>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <p class="section-label">Client Results</p>
+  <h2 class="section-title">What Our Clients Are Saying</h2>
+  <p class="section-sub">Real results from real trades businesses using our automation systems.</p>
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"Before this, I was losing 4–5 leads a week to missed calls. Now every call gets a text back within a minute. Booked 3 new jobs in the first week alone."</p>
+      <div class="testimonial-author">
+        <div class="avatar">MT</div>
+        <div>
+          <div class="author-name">Mike T.</div>
+          <div class="author-role">Owner, MT Plumbing Services</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"The AI voice assistant is unreal. It handles calls at 11pm and books jobs for me. I woke up to two new appointments this morning without doing a thing."</p>
+      <div class="testimonial-author">
+        <div class="avatar">JR</div>
+        <div>
+          <div class="author-name">James R.</div>
+          <div class="author-role">Owner, Rapid Electric Co.</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p>"We were skeptical at first, but the ROI was immediate. The review automation alone has gotten us 40+ new Google reviews in two months. Our ranking shot up."</p>
+      <div class="testimonial-author">
+        <div class="avatar">SL</div>
+        <div>
+          <div class="author-name">Sarah L.</div>
+          <div class="author-role">Operations Manager, Summit HVAC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <p class="section-label">Get Started Today</p>
+  <h2>Ready to Never Miss a Job Again?</h2>
+  <p>Book a free 30-minute strategy call. We'll show you exactly how many leads you're losing and how to fix it.</p>
+  <a href="mailto:mcginnisjosh89@gmail.com" class="btn-primary" style="display:inline-block">Book Your Free Call →</a>
+</section>
+
+<footer>
+  <div class="logo">McGinnis <span>AI Automation</span></div>
+  <p style="color:var(--muted);font-size:0.85rem">© 2026 McGinnis AI Automation. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:mcginnisjosh89@gmail.com">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
