@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact | McGinnis AI Automation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #16161f;
+      --border: #1e1e2e;
+      --border-focus: #4f8ef7;
+      --accent: #4f8ef7;
+      --accent2: #7c3aed;
+      --text: #e2e2f0;
+      --muted: #6b6b8a;
+      --heading: #ffffff;
+      --success: #22c55e;
+      --error: #ef4444;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--heading);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .logo span { color: var(--accent); }
+    nav a.back {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a.back:hover { color: var(--accent); }
+
+    .page-wrap {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(79,142,247,0.3);
+      border-radius: 2px;
+      padding: 0.3rem 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 800;
+      color: var(--heading);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    /* Form */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 520px) {
+      .form-row { grid-template-columns: 1fr; }
+      .page-wrap { padding: 2rem 1.25rem 4rem; }
+      .form-card { padding: 1.5rem; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    label .req { color: var(--accent); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      padding: 0.7rem 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+    }
+    select {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b8a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+    select option { background: #1a1a26; }
+    textarea { resize: vertical; min-height: 100px; }
+
+    /* Divider */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.75rem 0;
+    }
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--heading);
+      letter-spacing: 0.02em;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Opt-in checkbox */
+    .opt-in-block {
+      background: rgba(79,142,247,0.05);
+      border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 6px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .checkbox-row {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    .checkbox-label {
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.6;
+      cursor: pointer;
+    }
+    .legal-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(79,142,247,0.15);
+    }
+    .legal-links a {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .legal-links a:hover { text-decoration: underline; }
+
+    .fine-print {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: 0.6rem;
+    }
+
+    /* Submit */
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem 2rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 0.5rem;
+    }
+    .submit-btn:hover { background: #3a7ae0; }
+    .submit-btn:active { transform: scale(0.99); }
+
+    /* Success state */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+    .success-msg .check {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .success-msg h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--heading);
+      margin-bottom: 0.5rem;
+    }
+    .success-msg p { color: var(--muted); font-size: 0.95rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">McGinnis <span>AI</span> Automation</a>
+  <a class="back" href="index.html">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="badge">Get Started</div>
+  <h1>Let's Talk</h1>
+  <p class="subtitle">Tell us about your business and we'll reach out within one business day.</p>
+
+  <div class="form-card">
+
+    <!-- Success message (hidden by default) -->
+    <div class="success-msg" id="successMsg">
+      <div class="check">✅</div>
+      <h2>Message received!</h2>
+      <p>We'll be in touch within one business day.</p>
+    </div>
+
+    <!-- The form -->
+    <div id="formWrap">
+      <p class="section-label">Business Information</p>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="firstName">First Name <span class="req">*</span></label>
+          <input type="text" id="firstName" name="firstName" placeholder="Josh" required />
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name <span class="req">*</span></label>
+          <input type="text" id="lastName" name="lastName" placeholder="McGinnis" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="bizName">Business Name <span class="req">*</span></label>
+        <input type="text" id="bizName" name="bizName" placeholder="ABC Plumbing LLC" required />
+      </div>
+
+      <div class="field">
+        <label for="trade">Trade / Industry <span class="req">*</span></label>
+        <select id="trade" name="trade" required>
+          <option value="" disabled selected>Select your trade</option>
+          <option>Plumbing</option>
+          <option>Electrical</option>
+          <option>HVAC</option>
+          <option>General Contractor</option>
+          <option>Roofing</option>
+          <option>Landscaping</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="you@yourbiz.com" required />
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="(412) 555-0100" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">What's your biggest challenge right now?</label>
+        <textarea id="message" name="message" placeholder="e.g. Missing leads after hours, no follow-up system, manual scheduling..."></textarea>
+      </div>
+
+      <hr class="section-divider"/>
+      <p class="section-label">Communication Preferences</p>
+
+      <!-- ✅ COMPLIANT SMS OPT-IN BLOCK -->
+      <div class="opt-in-block">
+        <div class="checkbox-row">
+          <input type="checkbox" id="smsOptIn" name="smsOptIn" />
+          <label class="checkbox-label" for="smsOptIn">
+            I agree to receive SMS text messages from McGinnis AI Automation regarding appointment reminders, service updates, and follow-up communications related to my inquiry. Message frequency varies. Message and data rates may apply.
+          </label>
+        </div>
+        <p class="fine-print">Reply STOP to opt out at any time. Reply HELP for help. Consent is not a condition of purchase.</p>
+        <div class="legal-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
+        </div>
+      </div>
+
+      <button class="submit-btn" onclick="handleSubmit(event)">Send Message →</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 McGinnis AI Automation · <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms & Conditions</a></p>
+</footer>
+
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName  = document.getElementById('lastName').value.trim();
+    const bizName   = document.getElementById('bizName').value.trim();
+    const trade     = document.getElementById('trade').value;
+    const email     = document.getElementById('email').value.trim();
+
+    if (!firstName || !lastName || !bizName || !trade || !email) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    // Hide form, show success
+    document.getElementById('formWrap').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+
+    // In production: replace this with your actual form handler
+    // e.g. Formspree, Netlify Forms, or a Make.com webhook
+    console.log('Form submitted', {
+      firstName, lastName, bizName, trade, email,
+      smsOptIn: document.getElementById('smsOptIn').checked
+    });
+  }
+</script>
+
+</body>
+</html>
