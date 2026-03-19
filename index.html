@@ -3,311 +3,1178 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>McGinnis AI Automation — Automation for Trades Businesses</title>
+  <title>McGinnis AI Automation — AI Voice Receptionist for Trades</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
+    /* ─── Reset & Tokens ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0a0a0f; --bg2: #111118; --card: #16161f; --border: #2a2a3a;
-      --accent: #6c63ff; --accent2: #00d4aa; --text: #e8e8f0; --muted: #888899;
+      --bg: #0a0a0f;
+      --bg2: #111118;
+      --card: #16161f;
+      --border: #2a2a3a;
+      --accent: #6c63ff;
+      --accent2: #00d4aa;
+      --text: #e8e8f0;
+      --muted: #888899;
+      --red: #ff4655;
+      --font-display: 'Barlow Condensed', sans-serif;
+      --font-body: 'Barlow', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
+    /* ─── Navigation ─── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
       padding: 1.2rem 5%;
-      background: rgba(10,10,15,0.9); backdrop-filter: blur(12px);
+      background: rgba(10,10,15,0.92);
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
-    .logo { font-size: 1.4rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
-    .logo span { color: var(--accent); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-    .nav-links a:hover { color: #fff; }
-    .nav-cta { background: var(--accent); color: #fff; padding: 0.55rem 1.4rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
-
-    .hero {
-      min-height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; text-align: center;
-      padding: 8rem 5% 4rem; position: relative; overflow: hidden;
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
     }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(108,99,255,0.15) 0%, transparent 70%);
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.55rem 1.4rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { background: #7d75ff; transform: translateY(-1px); }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      padding: 9rem 5% 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(108,99,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,99,255,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 40%, transparent 100%);
+    }
+    .hero-glow {
+      position: absolute;
+      top: 15%; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse, rgba(108,99,255,0.16) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3);
-      color: var(--accent); padding: 0.4rem 1rem; border-radius: 100px;
-      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.05em;
-      text-transform: uppercase; margin-bottom: 1.5rem;
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.25);
+      color: var(--accent2);
+      padding: 0.4rem 1.1rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.2rem;
     }
-    .hero h1 { font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: #fff; max-width: 800px; margin-bottom: 1.5rem; }
-    .hero h1 .highlight { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 560px; margin-bottom: 2.5rem; }
-    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-    .btn-primary { background: var(--accent); color: #fff; padding: 0.85rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 1rem; box-shadow: 0 0 30px rgba(108,99,255,0.3); transition: transform 0.2s; }
-    .btn-primary:hover { transform: translateY(-2px); }
-    .btn-secondary { background: transparent; color: var(--text); padding: 0.85rem 2rem; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 1rem; border: 1px solid var(--border); transition: border-color 0.2s; }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-    .hero-stats { display: flex; gap: 3rem; margin-top: 4rem; flex-wrap: wrap; justify-content: center; }
-    .stat-num { font-size: 2rem; font-weight: 800; color: #fff; }
-    .stat-num em { color: var(--accent); font-style: normal; }
-    .stat-label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .no-change-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.09);
+      border: 1px solid rgba(108,99,255,0.22);
+      color: #a89eff;
+      padding: 0.35rem 0.9rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: #fff;
+      max-width: 900px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-demo {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      background: var(--accent2);
+      color: #000;
+      padding: 0.9rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
+      box-shadow: 0 0 40px rgba(0,212,170,0.25);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-demo:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(0,212,170,0.4); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent;
+      color: var(--text);
+      padding: 0.9rem 2rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
 
+    /* ─── Call Widget ─── */
+    .call-demo-widget {
+      margin-top: 4rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 2rem;
+      position: relative;
+      overflow: hidden;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .call-demo-widget::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+    .call-icon-wrap {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(0,212,170,0.12);
+      border: 2px solid rgba(0,212,170,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      animation: ring 3s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes ring {
+      0%, 60%, 100% { transform: rotate(0deg); }
+      65% { transform: rotate(-15deg); }
+      70% { transform: rotate(15deg); }
+      75% { transform: rotate(-10deg); }
+      80% { transform: rotate(10deg); }
+      85% { transform: rotate(-5deg); }
+      90% { transform: rotate(5deg); }
+    }
+    .call-info { text-align: left; }
+    .call-info-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .call-info-number {
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 600;
+    }
+    .call-info-status { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+    .call-status-badge {
+      background: rgba(0,212,170,0.1);
+      border: 1px solid rgba(0,212,170,0.3);
+      color: var(--accent2);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+      animation: status-blink 3s ease-in-out infinite;
+    }
+    @keyframes status-blink {
+      0%, 40%, 100% { opacity: 1; }
+      20% { opacity: 0.4; }
+    }
+
+    /* ─── Sections ─── */
     section { padding: 6rem 5%; }
-    .section-label { text-align: center; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-    .section-title { text-align: center; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 1rem; }
-    .section-sub { text-align: center; color: var(--muted); font-size: 1rem; max-width: 540px; margin: 0 auto 3.5rem; }
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 540px;
+      margin: 0 auto 3.5rem;
+      line-height: 1.7;
+    }
 
-    .problem { background: var(--bg2); }
-    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
-    .problem-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: border-color 0.3s; }
-    .problem-card:hover { border-color: rgba(108,99,255,0.4); }
-    .problem-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .problem-card h3 { color: #fff; font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .problem-card p { color: var(--muted); font-size: 0.88rem; }
+    /* ─── Problem Bar ─── */
+    .problem-bar {
+      background: var(--bg2);
+      padding: 3rem 5%;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .problem-bar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+    .problem-stat .num {
+      font-family: var(--font-display);
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .problem-stat .label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+    .problem-stat .label strong { color: var(--text); }
 
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
-    .service-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; transition: transform 0.3s, border-color 0.3s; }
-    .service-card:hover { transform: translateY(-4px); border-color: rgba(108,99,255,0.4); }
-    .service-card.featured { border-color: var(--accent); background: linear-gradient(135deg, rgba(108,99,255,0.1), var(--card)); }
-    .service-badge { display: inline-block; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.25rem 0.75rem; border-radius: 100px; margin-bottom: 1.2rem; }
-    .service-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 0.4rem; }
-    .price { font-size: 2.2rem; font-weight: 800; color: #fff; margin: 1rem 0; }
-    .price span { font-size: 1rem; color: var(--muted); font-weight: 400; }
-    .service-features { list-style: none; margin: 1.5rem 0; }
-    .service-features li { color: var(--muted); font-size: 0.9rem; padding: 0.4rem 0; display: flex; align-items: center; gap: 0.6rem; }
-    .service-features li::before { content: '✓'; color: var(--accent2); font-weight: 700; }
-    .btn-card { display: block; text-align: center; width: 100%; padding: 0.8rem; border-radius: 10px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: opacity 0.2s; }
-    .btn-card-solid { background: var(--accent); color: #fff; }
-    .btn-card-outline { border: 1px solid var(--border); color: var(--text); }
-    .btn-card:hover { opacity: 0.8; }
+    /* ─── Demo Section ─── */
+    .demo-section { background: var(--bg2); }
+    .demo-inner { max-width: 860px; margin: 0 auto; }
+    .demo-box {
+      background: var(--card);
+      border: 2px solid var(--accent2);
+      border-radius: 16px;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(0,212,170,0.1);
+    }
+    .demo-box::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+    }
+    .demo-live-tag {
+      position: absolute; top: 1.2rem; right: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .demo-live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent2);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    .demo-phone-number {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .demo-phone-number a { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .demo-phone-number a:hover { color: var(--accent2); }
+    .demo-sublabel { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.5rem; }
+    .demo-instruction-block {
+      background: rgba(108,99,255,0.06);
+      border: 1px solid rgba(108,99,255,0.2);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .demo-instruction-block h4 {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .demo-instruction-block p { font-size: 0.95rem; color: var(--text); line-height: 1.7; }
+    .demo-instruction-block strong { color: var(--accent2); }
+    .demo-cta-wrap { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+    .btn-call {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      background: var(--accent2);
+      color: #000;
+      padding: 1rem 2.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 40px rgba(0,212,170,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-call:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(0,212,170,0.5); }
+    .call-pulse {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      position: relative; flex-shrink: 0;
+    }
+    .call-pulse::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.35);
+      animation: call-pulse-anim 1.5s ease-out infinite;
+    }
+    @keyframes call-pulse-anim {
+      from { transform: scale(1); opacity: 1; }
+      to { transform: scale(2.5); opacity: 0; }
+    }
 
-    .how { background: var(--bg2); }
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
-    .step { text-align: center; padding: 1.5rem; }
-    .step-num { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; color: #fff; margin: 0 auto 1.2rem; }
-    .step h3 { color: #fff; margin-bottom: 0.5rem; }
-    .step p { color: var(--muted); font-size: 0.88rem; }
+    /* ─── Features Grid ─── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(108,99,255,0.4); transform: translateY(-3px); }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 1rem; display: block; }
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+    .feature-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
+    .feature-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      color: var(--accent2);
+      letter-spacing: 0.06em;
+    }
 
-    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
-    .testimonial { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
-    .stars { color: #f59e0b; margin-bottom: 1rem; }
-    .testimonial p { color: var(--text); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
-    .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
-    .avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 0.9rem; }
-    .author-name { color: #fff; font-weight: 600; font-size: 0.9rem; }
-    .author-role { color: var(--muted); font-size: 0.8rem; }
+    /* ─── Address Validation ─── */
+    .address-section {
+      background: linear-gradient(135deg, rgba(108,99,255,0.07) 0%, rgba(0,212,170,0.04) 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .address-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .address-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .address-content h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      line-height: 1.05;
+    }
+    .address-content p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+      margin-bottom: 0.8rem;
+    }
+    .address-benefits { list-style: none; margin-top: 1.5rem; }
+    .address-benefits li {
+      display: flex; align-items: flex-start; gap: 0.7rem;
+      color: var(--text);
+      font-size: 0.88rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .address-benefits li:last-child { border-bottom: none; }
+    .check-green { color: var(--accent2); flex-shrink: 0; margin-top: 0.05rem; font-weight: 700; }
+    .address-visual {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .map-mock {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.2rem;
+    }
+    .map-grid-lines {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .map-pin {
+      position: relative; z-index: 2;
+      font-size: 2.5rem;
+      animation: pin-bob 2.5s ease-in-out infinite;
+    }
+    @keyframes pin-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+    .map-ripple {
+      position: absolute;
+      width: 55px; height: 55px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,212,170,0.4);
+      animation: ripple-out 2.5s ease-out infinite;
+      z-index: 1;
+    }
+    @keyframes ripple-out {
+      from { transform: scale(0.5); opacity: 0.8; }
+      to { transform: scale(2.8); opacity: 0; }
+    }
+    .validation-status {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      border-radius: 8px;
+    }
+    .v-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .v-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent2); letter-spacing: 0.05em; }
+    .v-addr { font-size: 0.82rem; color: var(--text); margin-top: 0.15rem; }
 
-    .cta-section { text-align: center; background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,170,0.08)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .cta-section h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: #fff; margin-bottom: 1rem; }
-    .cta-section p { color: var(--muted); max-width: 500px; margin: 0 auto 2.5rem; }
+    /* ─── ROI ─── */
+    .roi-section { background: var(--bg2); }
+    .roi-inner { max-width: 820px; margin: 0 auto; }
+    .roi-estimate {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .roi-estimate-header {
+      background: linear-gradient(135deg, rgba(108,99,255,0.14), rgba(0,212,170,0.07));
+      border-bottom: 1px solid var(--border);
+      padding: 1.4rem 2.5rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .roi-estimate-header h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .roi-est-num { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+    .roi-body { padding: 2.5rem; }
+    .roi-line {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 1rem;
+    }
+    .roi-line:last-child { border-bottom: none; }
+    .roi-label { font-size: 0.9rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+    .roi-arrow { color: var(--accent); font-size: 0.75rem; }
+    .roi-value { font-family: var(--font-mono); font-size: 0.95rem; font-weight: 600; color: var(--text); white-space: nowrap; }
+    .roi-line.highlight .roi-value { color: var(--accent2); font-size: 1.05rem; }
+    .roi-line.cost .roi-value { color: var(--red); }
+    .roi-total {
+      border-top: 2px solid var(--accent);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .roi-total-label {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #fff;
+    }
+    .roi-total-value {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent2);
+      letter-spacing: -0.02em;
+    }
+    .roi-disclaimer {
+      margin-top: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+    }
+    .roi-anchor {
+      text-align: center;
+      margin-top: 2.5rem;
+      padding: 1.8rem 2rem;
+      background: rgba(108,99,255,0.07);
+      border: 1px solid rgba(108,99,255,0.2);
+      border-radius: 12px;
+    }
+    .roi-anchor p {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+    }
+    .roi-anchor p em { font-style: normal; color: var(--accent2); }
 
-    footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 3rem 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    /* ─── Pricing ─── */
+    .pricing-card-wrap { max-width: 580px; margin: 0 auto; }
+    .pricing-card {
+      background: var(--card);
+      border: 2px solid var(--accent);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(108,99,255,0.14);
+    }
+    .pricing-card-top {
+      background: linear-gradient(135deg, rgba(108,99,255,0.16), rgba(0,212,170,0.07));
+      border-bottom: 1px solid rgba(108,99,255,0.28);
+      padding: 2.5rem;
+      text-align: center;
+    }
+    .pricing-card-top h3 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .pricing-main {
+      display: flex; align-items: baseline; justify-content: center;
+      gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0 0.5rem;
+    }
+    .pricing-setup {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.25rem 0.7rem;
+    }
+    .pricing-plus { color: var(--muted); font-size: 1.2rem; }
+    .pricing-monthly {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .pricing-monthly-suffix { font-size: 1rem; color: var(--muted); }
+    .pricing-commitment {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      margin-top: 0.6rem;
+    }
+    .pricing-card-body { padding: 2.5rem; }
+    .pricing-features { list-style: none; }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 0.8rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .pricing-features .check { color: var(--accent2); flex-shrink: 0; font-weight: 700; }
+    .pricing-card-footer { padding: 0 2.5rem 2.5rem; }
+    .btn-get-started {
+      display: block;
+      text-align: center;
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      box-shadow: 0 0 40px rgba(108,99,255,0.28);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-get-started:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(108,99,255,0.5); }
+    .pricing-note {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 2rem;
+      letter-spacing: 0.02em;
+      line-height: 1.7;
+    }
+
+    /* ─── How It Works ─── */
+    .how-section { background: var(--bg2); }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0;
+      max-width: 1000px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 27px; left: 12%; right: 12%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+      opacity: 0.25;
+    }
+    .step-item { text-align: center; padding: 1.5rem; position: relative; }
+    .step-num-wrap {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      position: relative; z-index: 1;
+      transition: border-color 0.3s;
+    }
+    .step-item:hover .step-num-wrap { border-color: var(--accent); }
+    .step-num { font-family: var(--font-mono); font-weight: 600; font-size: 0.95rem; color: var(--accent); }
+    .step-item h3 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .step-item p { color: var(--muted); font-size: 0.84rem; line-height: 1.6; }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      text-align: center;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+    .cta-section p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-info {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.8;
+    }
+    .footer-info a { color: var(--muted); text-decoration: none; }
+    .footer-info a:hover { color: var(--accent2); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
     .footer-links a:hover { color: #fff; }
 
-    @media (max-width: 640px) {
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
       .nav-links { display: none; }
-      .hero-stats { gap: 1.5rem; }
+      .address-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .steps-grid::before { display: none; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions, .cta-actions, .demo-cta-wrap { flex-direction: column; align-items: stretch; }
+      .roi-estimate-header { flex-direction: column; align-items: flex-start; }
+      .call-demo-widget { flex-direction: column; text-align: center; }
+      .call-info { text-align: center; }
     }
   </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-  <div class="logo">McGinnis <span>AI Automation</span></div>
+  <div class="logo">McGinnis <span>AI</span> Automation</div>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
+    <li><a href="#demo">Demo</a></li>
     <li><a href="#how">How It Works</a></li>
-    <li><a href="#testimonials">Results</a></li>
+    <li><a href="#roi">ROI</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Get Started</a>
+  <a href="mailto:notifications@mcginnisaiautomation.com" class="nav-cta">Get Started</a>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">📞 AI Voice Answering for Trades</div>
-  <h1>Your Phone Gets Answered. <span class="highlight">Every Single Time.</span></h1>
-  <p>We deploy a 24/7 AI voice assistant that answers calls, qualifies leads, and logs every job to your dashboard — even at 2am on a Sunday.</p>
-  <div class="hero-buttons">
-    <a href="#contact" class="btn-primary">Book a Free Demo</a>
-    <a href="#services" class="btn-secondary">See Pricing →</a>
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    AI Voice Receptionist — Live &amp; Running
   </div>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num">24<em>/7</em></div>
-      <div class="stat-label">AI answers every call</div>
+
+  <div class="no-change-badge">
+    ✓ No number change required — works with your existing business line
+  </div>
+
+  <h1>Your Phone Gets Answered.<br><em>Every Single Time.</em></h1>
+
+  <p>AI answers your calls 24/7, books jobs, sends confirmation texts, and logs everything — all using the number you already have. No staff. No voicemail. No missed jobs.</p>
+
+  <div class="hero-actions">
+    <a href="tel:+18446190723" class="btn-demo">📞 Call the Live Demo</a>
+    <a href="#roi" class="btn-outline">See the ROI →</a>
+  </div>
+
+  <div class="call-demo-widget">
+    <div class="call-icon-wrap">📱</div>
+    <div class="call-info">
+      <div class="call-info-label">Incoming Call</div>
+      <div class="call-info-number">(412) 555-0192</div>
+      <div class="call-info-status">Sunday night — 10:47 PM</div>
     </div>
-    <div class="stat">
-      <div class="stat-num">0<em>sec</em></div>
-      <div class="stat-label">Wait time for callers</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">3<em>x</em></div>
-      <div class="stat-label">More leads captured</div>
-    </div>
+    <div class="call-status-badge">● AI ANSWERING</div>
   </div>
 </section>
 
-<section class="problem" id="problem">
-  <p class="section-label">The Problem</p>
-  <h2 class="section-title">Every Missed Call Is a Lost Job</h2>
-  <p class="section-sub">Trades businesses lose thousands in revenue every week from unanswered calls. Here's what's happening right now.</p>
-  <div class="problem-grid">
-    <div class="problem-card">
-      <div class="problem-icon">📵</div>
-      <h3>You Can't Always Answer</h3>
-      <p>You're on a job, under a sink, or on a roof. Calls go to voicemail — and most people hang up and call your competitor.</p>
+<!-- PROBLEM BAR -->
+<div class="problem-bar">
+  <div class="problem-bar-inner">
+    <div class="problem-stat">
+      <div class="num">30–40%</div>
+      <div class="label"><strong>of after-hours calls</strong> go to voicemail and never come back</div>
     </div>
-    <div class="problem-card">
-      <div class="problem-icon">⏰</div>
-      <h3>Slow Follow-Up Kills Deals</h3>
-      <p>A lead who doesn't hear back within 5 minutes is 21x less likely to convert. Delayed responses cost you real money.</p>
+    <div class="problem-stat">
+      <div class="num">5 min</div>
+      <div class="label">You have <strong>5 minutes</strong> to respond before you're 21x less likely to close the job</div>
     </div>
-    <div class="problem-card">
-      <div class="problem-icon">📋</div>
-      <h3>Your Number Goes to Voicemail After Hours</h3>
-      <p>Most trades jobs are urgent. If a customer calls at 7pm and gets voicemail, they're calling the next company before you even know you missed them.</p>
+    <div class="problem-stat">
+      <div class="num">$800</div>
+      <div class="label">Average value of a <strong>missed plumbing or HVAC call</strong></div>
     </div>
-    <div class="problem-card">
-      <div class="problem-icon">💸</div>
-      <h3>Paying for Leads You're Losing</h3>
-      <p>You're spending on ads and referrals but losing leads before they ever book. That's money down the drain.</p>
+    <div class="problem-stat">
+      <div class="num">$697</div>
+      <div class="label">Monthly retainer. <strong>One booked job covers it.</strong> Everything else is margin.</div>
     </div>
   </div>
-</section>
+</div>
 
-<section id="services">
-  <p class="section-label">Pricing Plans</p>
-  <h2 class="section-title">Simple, Flat-Rate Plans</h2>
-  <p class="section-sub">One-time setup. Low monthly retainer. Minimum 3-month commitment so we can optimize your system properly.</p>
-  <div class="services-grid">
-    <div class="service-card">
-      <h3>Starter</h3>
-      <p style="color:var(--muted);font-size:0.9rem;margin-top:0.3rem">Perfect for solo operators &amp; small crews</p>
-      <div class="price">$297<span>/mo</span></div>
-      <ul class="service-features">
-        <li style="color:#e8e8f0;font-weight:600">One-time setup: $997</li>
-        <li>24/7 AI voice answering</li>
-        <li>Lead qualification on every call</li>
-        <li>Airtable lead dashboard</li>
-        <li>Post-call SMS to caller</li>
-        <li>Urgent lead alert to owner</li>
-        <li>100 voice minutes/mo included</li>
-      </ul>
-      <a href="#contact" class="btn-card btn-card-outline">Get Started</a>
-    </div>
-    <div class="service-card featured">
-      <div class="service-badge">Most Popular</div>
-      <h3>Growth</h3>
-      <p style="color:var(--muted);font-size:0.9rem;margin-top:0.3rem">For growing trades businesses</p>
-      <div class="price">$497<span>/mo</span></div>
-      <ul class="service-features">
-        <li style="color:#e8e8f0;font-weight:600">One-time setup: $2,500</li>
-        <li>Everything in Starter</li>
-        <li>Outbound follow-up calls for open leads</li>
-        <li>Post-job review request calls</li>
-        <li>Appointment reminders &amp; confirmations</li>
-        <li>Airtable pipeline view</li>
-        <li>250 voice minutes/mo included</li>
-      </ul>
-      <a href="#contact" class="btn-card btn-card-solid">Get Started</a>
-    </div>
-    <div class="service-card">
-      <h3>Pro — Full AI Front Office</h3>
-      <p style="color:var(--muted);font-size:0.9rem;margin-top:0.3rem">Full AI front office replacement</p>
-      <div class="price">$697<span>/mo</span></div>
-      <ul class="service-features">
-        <li style="color:#e8e8f0;font-weight:600">One-time setup: $4,500</li>
-        <li>Everything in Growth</li>
-        <li>Multi-line call routing</li>
-        <li>Outbound reactivation campaigns</li>
-        <li>Live transfer to owner for escalations</li>
-        <li>Custom voice persona &amp; branding</li>
-        <li>500 voice minutes/mo included</li>
-      </ul>
-      <a href="#contact" class="btn-card btn-card-outline">Get Started</a>
-    </div>
-  </div>
-</section>
+<!-- DEMO SECTION -->
+<section class="demo-section" id="demo">
+  <p class="section-eyebrow">Try It Right Now</p>
+  <h2 class="section-title">Hear It in Action</h2>
+  <p class="section-sub">This is the exact same system your customers would call. Experience it yourself before you make any decision.</p>
+  <div class="demo-inner">
+    <div class="demo-box">
+      <div class="demo-live-tag">
+        <div class="demo-live-dot"></div>
+        LIVE DEMO
+      </div>
+      <div class="demo-phone-number">
+        <a href="tel:+18446190723">(844) 619-0723</a>
+      </div>
+      <p class="demo-sublabel">John Doe Plumbing Demo Line — Available 24/7</p>
 
-<section class="how" id="how">
-  <p class="section-label">The Process</p>
-  <h2 class="section-title">Up and Running in Days, Not Months</h2>
-  <p class="section-sub">We handle everything. You just keep doing the work you're great at.</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Free Strategy Call</h3>
-      <p>We learn your business, service area, and call volume — then recommend the right tier and script approach.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>We Build Your Voice Agent</h3>
-      <p>We configure your AI assistant, set up call forwarding from your existing number, and build your lead dashboard.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>We Test Every Call Flow</h3>
-      <p>Live call testing across real scenarios before launch. Your AI handles edge cases, objections, and urgent jobs correctly.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <h3>30-Day Tuning Window</h3>
-      <p>We monitor call quality after launch and refine your assistant's responses until it performs exactly how you need it to.</p>
-    </div>
-  </div>
-</section>
+      <div class="demo-instruction-block">
+        <h4>How to test it</h4>
+        <p>Call the number above and <strong>pretend you're interested in booking a plumbing appointment.</strong> Tell the AI your name, describe your issue, and provide a <strong>real street address</strong> — the system validates your address against Google Maps before confirming the booking. That's a live feature, not a demo shortcut.</p>
+      </div>
 
-<section id="testimonials">
-  <p class="section-label">Client Results</p>
-  <h2 class="section-title">What Our Clients Are Saying</h2>
-  <p class="section-sub">Real results from real trades businesses using our automation systems.</p>
-  <div class="testimonials-grid">
-    <div class="testimonial">
-      <div class="stars">★★★★★</div>
-      <p>"Before this, I was losing 4–5 leads a week to missed calls. Now every call gets a text back within a minute. Booked 3 new jobs in the first week alone."</p>
-      <div class="testimonial-author">
-        <div class="avatar">MT</div>
-        <div>
-          <div class="author-name">Mike T.</div>
-          <div class="author-role">Owner, MT Plumbing Services</div>
-        </div>
+      <div class="demo-cta-wrap">
+        <a href="tel:+18446190723" class="btn-call">
+          <div class="call-pulse"></div>
+          Call (844) 619-0723
+        </a>
+        <a href="mailto:notifications@mcginnisaiautomation.com" class="btn-outline">✉ Questions? Email Us</a>
       </div>
     </div>
-    <div class="testimonial">
-      <div class="stars">★★★★★</div>
-      <p>"The AI voice assistant is unreal. It handles calls at 11pm and books jobs for me. I woke up to two new appointments this morning without doing a thing."</p>
-      <div class="testimonial-author">
-        <div class="avatar">JR</div>
-        <div>
-          <div class="author-name">James R.</div>
-          <div class="author-role">Owner, Rapid Electric Co.</div>
-        </div>
-      </div>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section id="features">
+  <p class="section-eyebrow">What the System Does</p>
+  <h2 class="section-title">Everything a Receptionist Does — Automated</h2>
+  <p class="section-sub">Every one of these features is live in the demo you just called. This is what gets built for your business on day one.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">📞</span>
+      <h3>Answers Every Call 24/7</h3>
+      <p>The AI picks up instantly — no hold music, no voicemail. It works through your existing business number via call forwarding. Your customers don't notice a thing.</p>
+      <span class="feature-tag">Twilio call forwarding · No number change</span>
     </div>
-    <div class="testimonial">
-      <div class="stars">★★★★★</div>
-      <p>"We were skeptical at first, but the ROI was immediate. The review automation alone has gotten us 40+ new Google reviews in two months. Our ranking shot up."</p>
-      <div class="testimonial-author">
-        <div class="avatar">SL</div>
+    <div class="feature-card">
+      <span class="feature-icon">📅</span>
+      <h3>Books, Reschedules &amp; Cancels</h3>
+      <p>Appointments booked hands-free. Customers can schedule, change, or cancel on the same call. Everything syncs to Google Calendar in real time — no double-bookings.</p>
+      <span class="feature-tag">Google Calendar · Real-time sync</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💬</span>
+      <h3>SMS Confirmation — Automatic</h3>
+      <p>After every booking, the customer gets a text with their date and time. No manual follow-up. No copy-pasting. It just happens.</p>
+      <span class="feature-tag">Twilio SMS · Post-call confirmation</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔔</span>
+      <h3>Owner Alerts for Callbacks</h3>
+      <p>When a caller needs a callback or cancels, you get an instant SMS. Nothing falls through the cracks — you always know exactly what needs your attention.</p>
+      <span class="feature-tag">SMS alerts · Instant notification</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📊</span>
+      <h3>Every Call Logged in Airtable</h3>
+      <p>Caller name, number, issue, address, appointment time — all captured automatically. You get a clean, searchable dashboard of every single interaction.</p>
+      <span class="feature-tag">Airtable · Real-time logging</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🗓️</span>
+      <h3>Google Calendar Updated Instantly</h3>
+      <p>Every appointment shows up on your calendar the moment it's booked. No manual entry. No syncing delays. Your schedule is always accurate.</p>
+      <span class="feature-tag">Google Calendar · Instant update</span>
+    </div>
+  </div>
+</section>
+
+<!-- ADDRESS VALIDATION -->
+<section class="address-section" id="address">
+  <div class="address-inner">
+    <div class="address-content">
+      <div class="address-eyebrow">
+        <span>📍</span> Key Differentiator
+      </div>
+      <h2>Google Address Validation</h2>
+      <p>Before confirming any appointment, the AI checks the caller's address against Google Maps. This isn't a nice-to-have — it's a core protection built into every booking.</p>
+      <p>Bad addresses mean wasted drive time, missed jobs, and scheduling headaches. This feature catches them on the first call, before anything is confirmed.</p>
+      <ul class="address-benefits">
+        <li><span class="check-green">✓</span> Verifies the address exists before booking is confirmed</li>
+        <li><span class="check-green">✓</span> Confirms the job is inside your service area</li>
+        <li><span class="check-green">✓</span> Catches typos and incomplete addresses in real time</li>
+        <li><span class="check-green">✓</span> Prevents bad data from entering your Airtable log</li>
+        <li><span class="check-green">✓</span> Built in — no extra setup, no extra cost</li>
+      </ul>
+    </div>
+    <div class="address-visual">
+      <div class="map-mock">
+        <div class="map-grid-lines"></div>
+        <div class="map-pin">📍</div>
+        <div class="map-ripple"></div>
+      </div>
+      <div class="validation-status">
+        <span class="v-icon">✅</span>
         <div>
-          <div class="author-name">Sarah L.</div>
-          <div class="author-role">Operations Manager, Summit HVAC</div>
+          <div class="v-label">Address Validated — In Service Area</div>
+          <div class="v-addr">123 Main St, Pittsburgh, PA 15201</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ROI SECTION -->
+<section class="roi-section" id="roi">
+  <p class="section-eyebrow">The Numbers</p>
+  <h2 class="section-title">What This Pays You Back</h2>
+  <p class="section-sub">Based on real averages for trades businesses. These are conservative estimates — your actual results will depend on your call volume and average job size.</p>
+  <div class="roi-inner">
+    <div class="roi-estimate">
+      <div class="roi-estimate-header">
+        <h3>ROI Estimate — Plumbing · 20 Missed Calls/Mo</h3>
+        <span class="roi-est-num">EST-2026-001</span>
+      </div>
+      <div class="roi-body">
+        <div class="roi-line">
+          <span class="roi-label">Monthly missed or after-hours calls</span>
+          <span class="roi-value">20 calls</span>
+        </div>
+        <div class="roi-line">
+          <span class="roi-label"><span class="roi-arrow">→</span> AI captures ~65% of missed calls</span>
+          <span class="roi-value">13 conversations</span>
+        </div>
+        <div class="roi-line">
+          <span class="roi-label"><span class="roi-arrow">→</span> 45% of live-booked conversations convert to jobs</span>
+          <span class="roi-value">~6 booked jobs</span>
+        </div>
+        <div class="roi-line">
+          <span class="roi-label"><span class="roi-arrow">→</span> Conservative average job value</span>
+          <span class="roi-value">$800 / job</span>
+        </div>
+        <div class="roi-line highlight">
+          <span class="roi-label" style="color:var(--text);font-weight:600;">Revenue recovered per month</span>
+          <span class="roi-value">$4,800 / mo</span>
+        </div>
+        <div class="roi-line cost">
+          <span class="roi-label">Monthly retainer</span>
+          <span class="roi-value">− $697 / mo</span>
+        </div>
+        <div class="roi-total">
+          <span class="roi-total-label">Return on Investment</span>
+          <span class="roi-total-value">6.9×</span>
+        </div>
+      </div>
+    </div>
+    <p class="roi-disclaimer">* Estimates only. Actual results depend on call volume, conversion rates, and average job size. Results are not guaranteed.</p>
+    <div class="roi-anchor">
+      <p>One booked job covers the monthly retainer.<br><em>Everything else is profit.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <p class="section-eyebrow">Pricing</p>
+  <h2 class="section-title">One System. One Price.</h2>
+  <p class="section-sub">No tiers. No surprises. You get the complete AI voice receptionist, fully built and tuned for your business.</p>
+  <div class="pricing-card-wrap">
+    <div class="pricing-card">
+      <div class="pricing-card-top">
+        <h3>AI Voice Receptionist — Full System</h3>
+        <div class="pricing-main">
+          <span class="pricing-setup">$4,500 setup</span>
+          <span class="pricing-plus">+</span>
+          <span class="pricing-monthly">$697</span>
+          <span class="pricing-monthly-suffix">/mo</span>
+        </div>
+        <div class="pricing-commitment">3-month minimum commitment</div>
+      </div>
+      <div class="pricing-card-body">
+        <ul class="pricing-features">
+          <li><span class="check">✓</span> Vapi AI voice assistant — fully configured for your trade</li>
+          <li><span class="check">✓</span> 6 Make.com automation scenarios — fully built</li>
+          <li><span class="check">✓</span> Airtable booking &amp; call log dashboard</li>
+          <li><span class="check">✓</span> Google Calendar real-time sync</li>
+          <li><span class="check">✓</span> Google Maps address validation on every booking</li>
+          <li><span class="check">✓</span> Twilio SMS — confirmations &amp; owner alerts</li>
+          <li><span class="check">✓</span> Works with your existing number (no change required)</li>
+          <li><span class="check">✓</span> 500 voice minutes + 500 SMS per month included</li>
+          <li><span class="check">✓</span> Full prompt engineering for your specific trade</li>
+          <li><span class="check">✓</span> 30-day post-launch tuning window — included</li>
+        </ul>
+      </div>
+      <div class="pricing-card-footer">
+        <a href="mailto:notifications@mcginnisaiautomation.com" class="btn-get-started">Get Started — Email Josh</a>
+      </div>
+    </div>
+    <p class="pricing-note">
+      Voice overage: $0.09/min above 500 min/mo · SMS overage billed at cost + 25%<br>
+      Each client requires Twilio 10DLC Brand + Campaign registration (~$20 one-time + ~$3/mo)
+    </p>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <p class="section-eyebrow">The Process</p>
+  <h2 class="section-title">Running in Days, Not Months</h2>
+  <p class="section-sub">We handle the entire build. You don't need to touch any software.</p>
+  <div class="steps-grid">
+    <div class="step-item">
+      <div class="step-num-wrap"><span class="step-num">01</span></div>
+      <h3>Strategy Call</h3>
+      <p>30 minutes. You explain how you work, your service area, and your call patterns. We take it from there.</p>
+    </div>
+    <div class="step-item">
+      <div class="step-num-wrap"><span class="step-num">02</span></div>
+      <h3>We Build It</h3>
+      <p>AI voice prompt, Airtable setup, Google Calendar, Twilio forwarding — all built by us. You just keep doing jobs.</p>
+    </div>
+    <div class="step-item">
+      <div class="step-num-wrap"><span class="step-num">03</span></div>
+      <h3>We Test Every Flow</h3>
+      <p>Live testing across every scenario before launch — booking, rescheduling, cancellation, urgent calls. All verified.</p>
+    </div>
+    <div class="step-item">
+      <div class="step-num-wrap"><span class="step-num">04</span></div>
+      <h3>30-Day Tuning</h3>
+      <p>We monitor call quality after launch and adjust the AI until it performs exactly how you need. Included at no extra cost.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
 <section class="cta-section" id="contact">
-  <p class="section-label">Get Started Today</p>
-  <h2>Ready to Never Miss a Job Again?</h2>
-  <p>Book a free 30-minute strategy call. We'll show you exactly how many leads you're losing and how to fix it.</p>
-  <a href="/cdn-cgi/l/email-protection#bcd1dfdbd5d2d2d5cfd6d3cfd48485fcdbd1ddd5d092dfd3d183cfc9ded6d9dfc881faced9d9998e8cefc8ceddc8d9dbc5998e8cffddd0d0998e8ceed9cdc9d9cfc89aded3d8c581f4d5998e8cf6d3cfd4998eff998cfd998cfdf5998e8bd1998e8cd5d2c8d9ced9cfc8d9d8998e8cd5d2998e8cded3d3d7d5d2db998e8cdd998e8cdaced9d9998e8ccfc8ceddc8d9dbc5998e8cdfddd0d092998e8cf4d9ced9998e8cddced9998e8cd1c5998e8cd8d9c8ddd5d0cf998ffd998cfd998cfdf2ddd1d9998ffd998e8c998cfdecd4d3d2d9998e8cf2c9d1ded9ce998ffd998e8c998cfdfec9cfd5d2d9cfcf998e8cf2ddd1d9998ffd998e8c998cfdfdcaddd5d0ddded5d0d5c8c5998e8c94d8ddc5cf998efac8d5d1d9cf998e8cc8d4ddc8998e8ccbd3ced7998e8cded9cfc895998ffd998e8c998cfd998cfdf0d3d3d7d5d2db998e8cdad3cecbddced8998e8cc8d3998e8ccfccd9ddd7d5d2db998e8ccbd5c8d4998e8cc5d3c99d" class="btn-primary" style="display:inline-block">Book Your Free 
+  <p class="section-eyebrow">Ready to Start</p>
+  <h2>Never Miss Another Job.</h2>
+  <p>Call the demo first so you can hear it yourself. Then email Josh directly — no sales funnel, just a straight conversation about whether this is right for your business.</p>
+  <div class="cta-actions">
+    <a href="tel:+18446190723" class="btn-demo">📞 Call the Demo — (844) 619-0723</a>
+    <a href="mailto:notifications@mcginnisaiautomation.com" class="btn-outline">✉ Email notifications@mcginnisaiautomation.com</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">McGinnis <span>AI</span> Automation</div>
+  <div class="footer-info">
+    Josh McGinnis &nbsp;·&nbsp; <a href="mailto:mcginnisjosh89@gmail.com">mcginnisjosh89@gmail.com</a> &nbsp;·&nbsp; (412) 576-6276<br>
+    <a href="mailto:notifications@mcginnisaiautomation.com">notifications@mcginnisaiautomation.com</a>
+  </div>
+  <div class="footer-links">
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+  </div>
+</footer>
+
+</body>
+</html>
