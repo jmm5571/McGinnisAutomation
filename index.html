@@ -279,6 +279,31 @@
     .section-title em { font-style: italic; color: var(--blue); }
     .section-sub { text-align: center; color: var(--text-secondary); font-size: 1rem; max-width: 540px; margin: 0 auto 3.5rem; line-height: 1.7; }
 
+    /* ─── Video Demo Section ─── */
+    .video-section { background: var(--bg); padding: 5rem 5%; }
+    .video-wrap { max-width: 860px; margin: 0 auto; }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .video-cta-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
     /* ─── Trust Bar ─── */
     .trust-bar { background: var(--card); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 2.5rem 5%; }
     .trust-bar-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; }
@@ -500,7 +525,7 @@
     <li><a href="#roi">ROI</a></li>
     <li><a href="#pricing">Pricing</a></li>
   </ul>
-  <a href="mailto:notifications@mcginnisaiautomation.com?subject=I%27m%20interested%20in%20getting%20started" class="nav-cta">Get Started</a>
+  <a href="/cdn-cgi/l/email-protection#7917160d101f101a180d1016170a39141a1e101717100a1810180c0d1614180d101617571a1614460a0c1b131c1a0d44305c4b4e145c4b4910170d1c0b1c0a0d1c1d5c4b4910175c4b491e1c0d0d10171e5c4b490a0d180b0d1c1d" class="nav-cta">Get Started</a>
 </nav>
 
 <!-- HERO -->
@@ -523,6 +548,30 @@
     <a href="#roi" class="btn-secondary">See the ROI &#x2192;</a>
   </div>
 
+</section>
+
+<!-- VIDEO DEMO SECTION -->
+<section class="video-section" id="video-demo">
+  <p class="section-eyebrow">See It In Action</p>
+  <h2 class="section-title">Watch the AI <em>handle a real call</em></h2>
+  <p class="section-sub">Booking, rescheduling, and cancellation — fully automated. This is the exact system we build for every client.</p>
+  <div class="video-wrap">
+    <div class="video-container">
+      <iframe
+        width="100%"
+        height="100%"
+        src="https://www.youtube.com/embed/nTKxusdJhd8?si=e0o6iNjyD8p9l-jE"
+        title="McGinnis AI Automation — JDP Live Demo"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-cta-wrap">
+      <a href="tel:+18446190723" class="btn-primary">&#x1F4DE; Try It Yourself — Call (844) 619-0723</a>
+    </div>
+  </div>
 </section>
 
 <!-- TRUST BAR -->
@@ -571,7 +620,7 @@
       </div>
       <div class="demo-cta-wrap">
         <a href="tel:+18446190723" class="btn-primary">&#x1F4DE; Call (844) 619-0723</a>
-        <a href="mailto:notifications@mcginnisaiautomation.com?subject=Question%20about%20the%20AI%20receptionist" class="btn-secondary">&#x2709; Questions? Email Us</a>
+        <a href="/cdn-cgi/l/email-protection#771918031e111e1416031e181904371a14101e19191e04161e160203181a16031e18195914181a480402151d1214034a26021204031e18195245471615180203524547031f12524547363e5245470512141207031e18191e0403" class="btn-secondary">&#x2709; Questions? Email Us</a>
       </div>
     </div>
   </div>
@@ -789,7 +838,7 @@
         </ul>
       </div>
       <div class="pricing-card-footer">
-        <a href="mailto:notifications@mcginnisaiautomation.com?subject=I%27m%20interested%20in%20the%20AI%20receptionist" class="btn-get-started">Get Started — Email Josh</a>
+        <a href="/cdn-cgi/l/email-protection#026c6d766b646b6163766b6d6c71426f61656b6c6c6b71636b6377766d6f63766b6d6c2c616d6f3d717760686761763f4b2730356f2730326b6c76677067717667662730326b6c273032766a67273032434b2730327067616772766b6d6c6b7176" class="btn-get-started">Get Started — Email Josh</a>
       </div>
     </div>
     <p class="pricing-note">Voice overage: $0.25/min above 300 min/mo · Unlimited SMS included<br>Each client requires Twilio 10DLC Brand + Campaign registration (~$20 one-time + ~$3/mo)</p>
@@ -810,9 +859,4 @@
 </section>
 
 <!-- CTA -->
-<section class="cta-section" id="contact">
-  <p class="section-eyebrow">Ready to Start</p>
-  <h2>Never miss <em>another job.</em></h2>
-  <p>Call the demo first so you can hear it yourself. Then email Josh directly — no sales funnel, just a straight conversation about whether this is right for your business.</p>
-  <div class="cta-actions">
-    <a href="tel:+18446190723" class="btn-
+<section class="cta-section" id="contact"
